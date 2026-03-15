@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<!-- saved from url=(0031)http://127.0.0.1:5500/arac.html -->
+<html lang="tr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menzil &amp; Maliyet</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+ 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #0f1117;
+      color: #e8e8e8;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+ 
+    .app { max-width: 680px; width: 100%; }
+ 
+    /* HEADER */
+    .header {
+      margin-bottom: 2rem;
+      padding-top: 1rem;
+    }
+ 
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #4ade80;
+      background: rgba(74, 222, 128, 0.1);
+      border: 1px solid rgba(74, 222, 128, 0.2);
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+ 
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+ 
+    .sub { font-size: 14px; color: #6b7280; }
+ 
+    /* BÖLÜM BAŞLIĞI */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #4b5563;
+      margin-bottom: 10px;
+    }
+ 
+    /* ARAÇ KARTLARI */
+    .car-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+ 
+    .car-btn {
+      padding: 12px 10px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid #1e2330;
+      border-radius: 10px;
+      background: #151821;
+      color: #9ca3af;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s;
+      line-height: 1.5;
+    }
+ 
+    .car-btn:hover {
+      background: #1a1f2e;
+      border-color: #2d3447;
+      color: #d1d5db;
+    }
+ 
+    .car-btn.active {
+      background: #0d1f3c;
+      border-color: #2563eb;
+      color: #93c5fd;
+    }
+ 
+    .car-btn .brand {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 2px;
+      color: #4b5563;
+    }
+ 
+    .car-btn.active .brand { color: #2563eb; }
+ 
+    .car-btn .model-name {
+      display: block;
+      color: #e5e7eb;
+      font-weight: 500;
+      font-size: 12px;
+    }
+ 
+    .car-btn.active .model-name { color: #bfdbfe; }
+ 
+    .car-btn .specs {
+      font-size: 11px;
+      font-weight: 400;
+      color: #4b5563;
+      display: block;
+      margin-top: 4px;
+    }
+ 
+    .car-btn.active .specs { color: #3b82f6; }
+ 
+    .data-note {
+      font-size: 11px;
+      color: #374151;
+      margin-bottom: 1.75rem;
+      margin-top: 4px;
+    }
+ 
+    /* SLIDERLAR */
+    .sliders {
+      background: #151821;
+      border: 1px solid #1e2330;
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+ 
+    .srow { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .srow:last-child { margin-bottom: 0; }
+ 
+    .srow label {
+      font-size: 13px;
+      color: #6b7280;
+      width: 155px;
+      flex-shrink: 0;
+    }
+ 
+    input[type=range] {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: #1e2330;
+      outline: none;
+    }
+ 
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: #3b82f6;
+      cursor: pointer;
+      border: 2px solid #0f1117;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+    }
+ 
+    .sval {
+      font-size: 13px;
+      font-weight: 600;
+      min-width: 72px;
+      color: #e5e7eb;
+      text-align: right;
+    }
+ 
+    /* METRİKLER */
+    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+ 
+    .metric {
+      border-radius: 12px;
+      padding: 14px 12px;
+      text-align: center;
+      border: 1px solid transparent;
+    }
+ 
+    .metric .ml { font-size: 11px; margin-bottom: 6px; font-weight: 500; }
+    .metric .mv { font-size: 20px; font-weight: 600; }
+ 
+    .m-blue  { background: #0d1f3c; border-color: #1e3a5f; }
+    .m-blue  .ml { color: #3b82f6; } .m-blue  .mv { color: #93c5fd; }
+ 
+    .m-teal  { background: #042f2e; border-color: #0f4f4e; }
+    .m-teal  .ml { color: #14b8a6; } .m-teal  .mv { color: #5eead4; }
+ 
+    .m-green { background: #052e16; border-color: #14532d; }
+    .m-green .ml { color: #22c55e; } .m-green .mv { color: #86efac; }
+ 
+    .m-amber { background: #2d1a00; border-color: #4d2d00; }
+    .m-amber .ml { color: #f59e0b; } .m-amber .mv { color: #fcd34d; }
+ 
+    /* BAR */
+    .bar-wrap { margin-bottom: 1.25rem; }
+ 
+    .bar-bg {
+      height: 8px;
+      background: #1e2330;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+ 
+    .bar-fg { height: 100%; border-radius: 4px; transition: width 0.4s, background 0.3s; }
+ 
+    .bar-lbls {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #374151;
+      margin-top: 5px;
+    }
+ 
+    /* SONUÇ */
+    .verdict {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 16px; border-radius: 10px;
+      font-size: 14px; font-weight: 500;
+      margin-bottom: 1.25rem;
+      border: 1px solid transparent;
+    }
+ 
+    .v-ok   { background: #052e16; border-color: #14532d; color: #86efac; }
+    .v-warn { background: #2d1a00; border-color: #4d2d00; color: #fcd34d; }
+    .v-bad  { background: #2d0a0a; border-color: #5c1a1a; color: #fca5a5; }
+ 
+    .vdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .v-ok .vdot { background: #22c55e; }
+    .v-warn .vdot { background: #f59e0b; }
+    .v-bad .vdot { background: #ef4444; }
+ 
+    /* ŞARJ BUTONU */
+    .station-box {
+      background: #151821;
+      border: 1px solid #1e2330;
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+ 
+    .station-info h3 { font-size: 14px; font-weight: 500; color: #e5e7eb; margin-bottom: 4px; }
+    .station-info p  { font-size: 12px; color: #6b7280; }
+ 
+    .maps-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 18px;
+      border: none; border-radius: 8px;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      white-space: nowrap; transition: opacity 0.15s; flex-shrink: 0;
+    }
+    .maps-btn:hover { opacity: 0.85; }
+    .maps-btn-ok   { background: #16a34a; color: white; }
+    .maps-btn-warn { background: #d97706; color: white; }
+    .maps-btn-bad  { background: #dc2626; color: white; }
+ 
+    /* MALİYET */
+    .cost-box {
+      background: #151821;
+      border: 1px solid #1e2330;
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+ 
+    .cost-title { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #4b5563; margin-bottom: 12px; }
+ 
+    .cost-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+ 
+    .cost-item {
+      background: #0f1117;
+      border: 1px solid #1e2330;
+      border-radius: 10px;
+      padding: 12px;
+    }
+ 
+    .cost-item .cl { font-size: 11px; color: #6b7280; margin-bottom: 4px; }
+    .cost-item .cv { font-size: 18px; font-weight: 600; color: #e5e7eb; }
+ 
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #1f2937;
+      padding-bottom: 2rem;
+    }
+ 
+    .footer span { color: #374151; }
+  </style>
+</head>
+<body>
+<div class="app">
+ 
+  <div class="header">
+    <div class="badge">⚡ Elektrikli Araç</div>
+    <h1>Menzil &amp; Maliyet</h1>
+    <p class="sub">Aracını seç, değerleri ayarla — yolculuğun yeter mi, maliyetin ne kadar?</p>
+  </div>
+ 
+  <div class="section-label">Araç modeli</div>
+  <div class="car-grid" id="carGrid"><div class="car-btn active" style="background: rgb(13, 31, 60); border-color: rgb(29, 78, 216);">
+        <span class="brand" style="color:#3b82f6">Togg</span>
+        <span class="model-name">T10X Standart</span>
+        <span class="specs">360 km · 16.7 kWh/100km</span>
+      </div><div class="car-btn">
+        <span class="brand" style="color:#3b82f6">Togg</span>
+        <span class="model-name">T10X Uzun Menzil</span>
+        <span class="specs">523 km · 16.9 kWh/100km</span>
+      </div><div class="car-btn">
+        <span class="brand" style="color:#8b5cf6">BYD</span>
+        <span class="model-name">Dolphin</span>
+        <span class="specs">427 km · 15.9 kWh/100km</span>
+      </div><div class="car-btn">
+        <span class="brand" style="color:#8b5cf6">BYD</span>
+        <span class="model-name">Atto 3</span>
+        <span class="specs">420 km · 16 kWh/100km</span>
+      </div><div class="car-btn">
+        <span class="brand" style="color:#8b5cf6">BYD</span>
+        <span class="model-name">Seal Design</span>
+        <span class="specs">460 km · 15.4 kWh/100km</span>
+      </div><div class="car-btn">
+        <span class="brand" style="color:#8b5cf6">BYD</span>
+        <span class="model-name">Seal U EV</span>
+        <span class="specs">500 km · 20.5 kWh/100km</span>
+      </div><div class="car-btn">
+        <span class="brand" style="color:#10b981">Tesla</span>
+        <span class="model-name">Model 3 LR</span>
+        <span class="specs">613 km · 13.3 kWh/100km</span>
+      </div><div class="car-btn">
+        <span class="brand" style="color:#10b981">Tesla</span>
+        <span class="model-name">Model Y LR</span>
+        <span class="specs">533 km · 16 kWh/100km</span>
+      </div><div class="car-btn">
+        <span class="brand" style="color:#ef4444">Peugeot</span>
+        <span class="model-name">e-208</span>
+        <span class="specs">340 km · 14.7 kWh/100km</span>
+      </div><div class="car-btn">
+        <span class="brand" style="color:#f59e0b">Opel</span>
+        <span class="model-name">Corsa Elektrik</span>
+        <span class="specs">350 km · 14.3 kWh/100km</span>
+      </div><div class="car-btn">
+        <span class="brand" style="color:#f59e0b">Opel</span>
+        <span class="model-name">Astra Elektrik</span>
+        <span class="specs">418 km · 14 kWh/100km</span>
+      </div><div class="car-btn">
+        <span class="brand" style="color:#14b8a6">Dacia</span>
+        <span class="model-name">Spring Electric</span>
+        <span class="specs">225 km · 14.5 kWh/100km</span>
+      </div></div>
+  <p class="data-note">* Menzil ve tüketim değerleri WLTP resmi test standartlarına göre alınmıştır.</p>
+ 
+  <div class="sliders">
+    <div class="srow">
+      <label>Şarj yüzdesi</label>
+      <input type="range" min="5" max="100" step="1" value="80" id="sarj" oninput="update()">
+      <span class="sval" id="sarj-val">%80</span>
+    </div>
+    <div class="srow">
+      <label>Gidilecek mesafe</label>
+      <input type="range" min="10" max="700" step="10" value="250" id="mesafe" oninput="update()">
+      <span class="sval" id="mesafe-val">250 km</span>
+    </div>
+    <div class="srow">
+      <label>Elektrik fiyatı (TL/kWh)</label>
+      <input type="range" min="2" max="15" step="0.5" value="6" id="fiyat" oninput="update()">
+      <span class="sval" id="fiyat-val">6.0 TL</span>
+    </div>
+  </div>
+ 
+  <div class="metrics">
+    <div class="metric m-blue">
+      <div class="ml">Mevcut menzil</div>
+      <div class="mv" id="m-menzil">288 km</div>
+    </div>
+    <div class="metric m-teal">
+      <div class="ml">Hedef mesafe</div>
+      <div class="mv" id="m-mesafe">250 km</div>
+    </div>
+    <div class="metric m-green">
+      <div class="ml">Fark</div>
+      <div class="mv" id="m-fark">+38 km</div>
+    </div>
+    <div class="metric m-amber">
+      <div class="ml">Yolculuk maliyeti</div>
+      <div class="mv" id="m-maliyet">251 TL</div>
+    </div>
+  </div>
+ 
+  <div class="bar-wrap">
+    <div class="bar-bg">
+      <div class="bar-fg" id="bar" style="width: 73%; background: rgb(245, 158, 11);"></div>
+    </div>
+    <div class="bar-lbls">
+      <span>0 km</span>
+      <span id="bar-mid">Menzil: 288 km / Hedef: 250 km</span>
+      <span id="bar-max">396 km</span>
+    </div>
+  </div>
+ 
+  <div class="verdict v-warn" id="verdict">
+    <div class="vdot"></div>
+    <span id="verdict-text">Yeterli ama dar! Sadece 38 km marjin var.</span>
+  </div>
+ 
+  <div class="station-box">
+    <div class="station-info">
+      <h3 id="station-title">Yolda şarj durağı planla!</h3>
+      <p id="station-desc">Marjin çok dar, bir şarj noktasına uğramayı düşün.</p>
+    </div>
+    <a id="maps-btn" class="maps-btn maps-btn-warn" href="https://www.google.com/maps/search/elektrikli+ara%C3%A7+%C5%9Farj+istasyonu" target="_blank">
+      Haritada Gör →
+    </a>
+  </div>
+ 
+  <div class="cost-box">
+    <div class="cost-title">Maliyet detayı</div>
+    <div class="cost-grid">
+      <div class="cost-item">
+        <div class="cl">Tüketilen enerji</div>
+        <div class="cv" id="c-kwh">41.8 kWh</div>
+      </div>
+      <div class="cost-item">
+        <div class="cl">Toplam maliyet</div>
+        <div class="cv" id="c-tl">251 TL</div>
+      </div>
+      <div class="cost-item">
+        <div class="cl">Km başına maliyet</div>
+        <div class="cv" id="c-km">1.00 TL/km</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="footer">
+    Hatice Efe — <span>Borusan Teknoloji Okulu 2022</span>
+  </div>
+</div>
+ 
+<script>
+  const arabalar = [
+    { marka: "Togg",    model: "T10X Standart",    menzil: 360, kwh: 16.7 },
+    { marka: "Togg",    model: "T10X Uzun Menzil", menzil: 523, kwh: 16.9 },
+    { marka: "BYD",     model: "Dolphin",           menzil: 427, kwh: 15.9 },
+    { marka: "BYD",     model: "Atto 3",            menzil: 420, kwh: 16.0 },
+    { marka: "BYD",     model: "Seal Design",       menzil: 460, kwh: 15.4 },
+    { marka: "BYD",     model: "Seal U EV",         menzil: 500, kwh: 20.5 },
+    { marka: "Tesla",   model: "Model 3 LR",        menzil: 613, kwh: 13.3 },
+    { marka: "Tesla",   model: "Model Y LR",        menzil: 533, kwh: 16.0 },
+    { marka: "Peugeot", model: "e-208",             menzil: 340, kwh: 14.7 },
+    { marka: "Opel",    model: "Corsa Elektrik",    menzil: 350, kwh: 14.3 },
+    { marka: "Opel",    model: "Astra Elektrik",    menzil: 418, kwh: 14.0 },
+    { marka: "Dacia",   model: "Spring Electric",   menzil: 225, kwh: 14.5 },
+  ];
+ 
+  // Her marka için renk
+  const markaRenk = {
+    "Togg":    { bg: "#0d1f3c", border: "#1d4ed8", brand: "#3b82f6", model: "#93c5fd", specs: "#2563eb" },
+    "BYD":     { bg: "#1a0a2e", border: "#7c3aed", brand: "#8b5cf6", model: "#c4b5fd", specs: "#6d28d9" },
+    "Tesla":   { bg: "#0f1f1a", border: "#059669", brand: "#10b981", model: "#6ee7b7", specs: "#047857" },
+    "Peugeot": { bg: "#1f0a0a", border: "#dc2626", brand: "#ef4444", model: "#fca5a5", specs: "#b91c1c" },
+    "Opel":    { bg: "#1a1200", border: "#d97706", brand: "#f59e0b", model: "#fde68a", specs: "#b45309" },
+    "Dacia":   { bg: "#001a14", border: "#0d9488", brand: "#14b8a6", model: "#99f6e4", specs: "#0f766e" },
+  };
+ 
+  let seciliArac = arabalar[0];
+ 
+  function buildCarGrid() {
+    const grid = document.getElementById('carGrid');
+    arabalar.forEach((araba, i) => {
+      const renk = markaRenk[araba.marka] || markaRenk["Togg"];
+      const btn = document.createElement('div');
+      btn.className = 'car-btn' + (i === 0 ? ' active' : '');
+ 
+      // Her marka farklı renkte
+      if (i === 0) {
+        btn.style.background   = renk.bg;
+        btn.style.borderColor  = renk.border;
+      }
+ 
+      btn.innerHTML = `
+        <span class="brand" style="color:${renk.brand}">${araba.marka}</span>
+        <span class="model-name">${araba.model}</span>
+        <span class="specs">${araba.menzil} km &middot; ${araba.kwh} kWh/100km</span>
+      `;
+ 
+      btn.onmouseover = () => {
+        if (!btn.classList.contains('active')) {
+          btn.style.background  = renk.bg;
+          btn.style.borderColor = renk.border;
+          btn.querySelector('.model-name').style.color = renk.model;
+          btn.querySelector('.specs').style.color = renk.specs;
+        }
+      };
+      btn.onmouseout = () => {
+        if (!btn.classList.contains('active')) {
+          btn.style.background  = '#151821';
+          btn.style.borderColor = '#1e2330';
+          btn.querySelector('.model-name').style.color = '#e5e7eb';
+          btn.querySelector('.specs').style.color = '#4b5563';
+        }
+      };
+ 
+      btn.onclick = () => {
+        document.querySelectorAll('.car-btn').forEach(b => {
+          b.classList.remove('active');
+          b.style.background  = '#151821';
+          b.style.borderColor = '#1e2330';
+        });
+        btn.classList.add('active');
+        btn.style.background  = renk.bg;
+        btn.style.borderColor = renk.border;
+        btn.querySelector('.model-name').style.color = renk.model;
+        btn.querySelector('.specs').style.color = renk.specs;
+        seciliArac = araba;
+        update();
+      };
+ 
+      grid.appendChild(btn);
+    });
+  }
+ 
+  function update() {
+    const sarj   = Number(document.getElementById('sarj').value);
+    const mesafe = Number(document.getElementById('mesafe').value);
+    const fiyat  = Number(document.getElementById('fiyat').value);
+ 
+    document.getElementById('sarj-val').textContent   = '%' + sarj;
+    document.getElementById('mesafe-val').textContent = mesafe + ' km';
+    document.getElementById('fiyat-val').textContent  = fiyat.toFixed(1) + ' TL';
+ 
+    // Ana hesaplama
+    const mevcut_menzil = Math.round(seciliArac.menzil * (sarj / 100));
+    const fark           = mevcut_menzil - mesafe;
+    const tuketim_kwh    = (mesafe / 100) * seciliArac.kwh;
+    const maliyet_tl     = tuketim_kwh * fiyat;
+    const km_basi        = maliyet_tl / mesafe;
+ 
+    document.getElementById('m-menzil').textContent  = mevcut_menzil + ' km';
+    document.getElementById('m-mesafe').textContent  = mesafe + ' km';
+    document.getElementById('m-fark').textContent    = (fark >= 0 ? '+' : '') + fark + ' km';
+    document.getElementById('m-maliyet').textContent = Math.round(maliyet_tl) + ' TL';
+    document.getElementById('c-kwh').textContent     = tuketim_kwh.toFixed(1) + ' kWh';
+    document.getElementById('c-tl').textContent      = Math.round(maliyet_tl) + ' TL';
+    document.getElementById('c-km').textContent      = km_basi.toFixed(2) + ' TL/km';
+ 
+    const maxBar = Math.max(seciliArac.menzil, mesafe) * 1.1;
+    const mPct   = Math.min(100, Math.round((mevcut_menzil / maxBar) * 100));
+    const pct    = Math.min(100, Math.round((mesafe / maxBar) * 100));
+    const bar    = document.getElementById('bar');
+ 
+    document.getElementById('bar-mid').textContent = 'Menzil: ' + mevcut_menzil + ' km / Hedef: ' + mesafe + ' km';
+    document.getElementById('bar-max').textContent = Math.round(maxBar) + ' km';
+ 
+    const verdict      = document.getElementById('verdict');
+    const verdictText  = document.getElementById('verdict-text');
+    const mapsBtn      = document.getElementById('maps-btn');
+    const stationTitle = document.getElementById('station-title');
+    const stationDesc  = document.getElementById('station-desc');
+ 
+    if (fark >= 50) {
+      bar.style.background = '#22c55e'; bar.style.width = mPct + '%';
+      verdict.className = 'verdict v-ok';
+      verdictText.textContent = 'Yeter! ' + fark + ' km fazladan menzil var.';
+      stationTitle.textContent = 'Şarj istasyonu aramak ister misin?';
+      stationDesc.textContent  = "Google Maps'te Türkiye'deki tüm şarj noktalarını görebilirsin.";
+      mapsBtn.className = 'maps-btn maps-btn-ok';
+    } else if (fark >= 0) {
+      bar.style.background = '#f59e0b'; bar.style.width = mPct + '%';
+      verdict.className = 'verdict v-warn';
+      verdictText.textContent = 'Yeterli ama dar! Sadece ' + fark + ' km marjin var.';
+      stationTitle.textContent = 'Yolda şarj durağı planla!';
+      stationDesc.textContent  = 'Marjin çok dar, bir şarj noktasına uğramayı düşün.';
+      mapsBtn.className = 'maps-btn maps-btn-warn';
+    } else {
+      bar.style.background = '#ef4444'; bar.style.width = pct + '%';
+      verdict.className = 'verdict v-bad';
+      verdictText.textContent = 'Şarj gerekli! ' + Math.abs(fark) + ' km eksik.';
+      stationTitle.textContent = 'Şarj istasyonu bul!';
+      stationDesc.textContent  = Math.abs(fark) + ' km eksik. Yola çıkmadan önce şarj et!';
+      mapsBtn.className = 'maps-btn maps-btn-bad';
+    }
+  }
+ 
+  buildCarGrid();
+  update();
+</script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+</body></html>
